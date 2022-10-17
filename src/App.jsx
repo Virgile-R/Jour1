@@ -6,7 +6,6 @@ function App() {
  
 
   return (
-    <div className="App">
       <BrowserRouter>
         <NavBar />
         <Routes>
@@ -14,7 +13,6 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </BrowserRouter>
-    </div>
   )
 }
 

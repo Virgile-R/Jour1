@@ -6,16 +6,16 @@ function Home() {
   const [showAlertTaskId, setShowAlertTaskId] = useState(null)
   const handleTaskInputChange = (e) => setNewTaskValue(e.target.value)
   
-  const handleSubmitTaskClick = () => {
-    const newTask = { id: Math.round(Math.random() * 1000), value: newTaskValue}
-    const newTaskArray = [...tasks, newTask]
-    setTasks(newTaskArray)
+  const handleSubmitTaskClick = (e) => {
+    e.preventDefault()
+    const newTask = { id: Math.round(Math.random() * 100000000) + Date.now(), value: newTaskValue }
+    setTasks((prevState) => [...prevState, newTask])
     setNewTaskValue('')
   }
 
-  const handleDeleteTask = (taskId) => {
-    const newTaskArray = tasks.filter(({id}) => id !== taskId)
-    setShowAlertTaskId(taskId)
+  const handleDeleteTask = (taskIndex) => {
+    const newTaskArray = tasks.filter((task, index) => index !== taskIndex)
+    setShowAlertTaskId(tasks[taskIndex].id)
     setTasks(newTaskArray)
   }
 
@@ -31,15 +31,17 @@ function Home() {
       <h1>Accueil</h1>
 
       <div className='mb-3'>
+      <form onSubmit={handleSubmitTaskClick}>
         <label htmlFor='taskInput' className='form-label'>Tâches</label>
         <input name='taskInput' id='taskInput' type='text' className='form-control mb-2' value={newTaskValue} onChange={handleTaskInputChange}></input>
-        <button type='button' className="btn btn-primary" onClick={handleSubmitTaskClick}>Enregistrer la tâche</button>
+        <button type='submit' className="btn btn-primary">Enregistrer la tâche</button>
+      </form>
       </div>
       <ul>
-        {tasks.map(({id, value}) => (
+        {tasks.map(({value}, index) => (
           <>
-            <li key={id}>{value}</li>
-            <button type='button' className="btn btn-danger" onClick={() => handleDeleteTask(id)}>Supprimer</button>
+            <li key={index}>{value}</li>
+            <button type='button' className="btn btn-danger" onClick={() => handleDeleteTask(index)}>Supprimer</button>
           </>
         ))}
       </ul>
